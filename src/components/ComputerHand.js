@@ -5,7 +5,7 @@ class ComputerHand extends Component {
   render(){
     return(
       <div>
-        <h1>COMPUTER</h1>
+        <h1>COMPUTER has {this.props.data.length} cards left.</h1>
         <Card cardName={this.props.data}/>
       </div>
     );
