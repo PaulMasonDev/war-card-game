@@ -95,7 +95,7 @@ class GameBoard extends Component {
           player = 10;
           break;
         default:
-          player = player;
+          player = this.state.game.playerDeck[0].slice(0, 1);
       }
     }
     if(typeof computer === 'string' || computer === '0'){
@@ -116,7 +116,7 @@ class GameBoard extends Component {
           computer = 10;
           break;
         default:
-          computer = computer;
+          computer = this.state.game.computerDeck[0].slice(0, 1);
       }
     }
 
@@ -133,7 +133,7 @@ class GameBoard extends Component {
       tempCompDeck.push(tempCompDeck.shift());
     } else if(player === computer){
       console.log('EQUALS');
-      
+
     }
     this.setState((prevState)=> ({
       prevState,
