@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 
+import './css/Card.css';
 class Card extends Component {
   render(){
     let url = 'https://deckofcardsapi.com/static/img/';

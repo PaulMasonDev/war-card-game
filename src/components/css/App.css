@@ -1,0 +1,22 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  color: #fff;
+  text-shadow: 1px 1px 2px #c26969;
+  background: url('https://images.unsplash.com/photo-1580136579312-94651dfd596d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60') no-repeat center center/cover;
+}
+
+body {
+  opacity: 0;
+  animation-name: body;
+  animation-duration: 2s;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+  
+@keyframes body{
+  to {
+    opacity: 1;
+  }
+}

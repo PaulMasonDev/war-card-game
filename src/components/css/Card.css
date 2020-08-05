@@ -1,0 +1,21 @@
+.Card {
+  display: flex;
+  justify-content: center;
+}
+
+.Card img {
+  opacity: 0;
+  animation-name: card;
+  animation-duration: 2s;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+  box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.2);
+  border-radius: 11px;
+}
+
+@keyframes card{
+  to {
+    opacity: 1;
+  }
+}
