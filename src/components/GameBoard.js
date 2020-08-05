@@ -12,15 +12,15 @@ class GameBoard extends Component {
     super(props);
     this.state = {
       game: {
-        deck: [],
-        playerDeck: [],
+        deck: [], // Initialized Deck
+        playerDeck: [], 
         computerDeck: [],
-        winner: null
+        tempDeck: [] // Used when there is a tie to hold the cards that the next winner will get.
       }
     }
   }
 
-  initializeDeck = () => {
+  initializeDeck = () => { // Initialize deck based upon default props.
     const {suits, values,} = this.props;
     const localDeck = [];
     for(let value of values.split(',')){
@@ -28,7 +28,7 @@ class GameBoard extends Component {
         localDeck.push(value + suit);
       }
     } 
-    this.setState((prevState) => ({
+    this.setState((prevState) => ({ //Setting proper state with the temporary localDeck
       prevState,
       game: {...prevState.game, deck: [...prevState.game.deck, ...localDeck]}
     }));
@@ -52,11 +52,11 @@ class GameBoard extends Component {
     const { deck } = this.state.game;
     const localPlayerDeck = [];
     const localComputerDeck = [];
-    for(let i = 0; i < 26; i ++){
-      let playerCard = deck.pop();
-      localPlayerDeck.push(playerCard);
-      let computerCard = deck.pop();
-      localComputerDeck.push(computerCard);
+    for(let i = 0; i < 26; i ++){ // Deals out all cards from deck and since shuffled, will be random cards in each deck.
+      let playerCard = deck.pop(); // Draw from the deck
+      localPlayerDeck.push(playerCard); // Deal to player
+      let computerCard = deck.pop(); // Draw from the deck
+      localComputerDeck.push(computerCard); //Deal to the Computer
     }
     this.setState((prevState)=> ({
       prevState,
@@ -75,6 +75,7 @@ class GameBoard extends Component {
     console.log(this.state.game.playerDeck[0]);
   }
   nextRound = () => {
+    // Grab the first character of each card in order to compare values. Some modification must be done to the non-numeric values and to 10, since it uses 0.
     let player = this.state.game.playerDeck[0].slice(0, 1);
     let computer = this.state.game.computerDeck[0].slice(0, 1);
     if(typeof player === 'string' || player === '0'){
@@ -119,21 +120,55 @@ class GameBoard extends Component {
           computer = this.state.game.computerDeck[0].slice(0, 1);
       }
     }
-
+    //Temporary Computer and Player Arrays copied from state, and will later be put into state.
     const tempCompDeck = [...this.state.game.computerDeck];
     const tempPlayerDeck = [...this.state.game.playerDeck];
 
-    if(player > computer){
-      const card = tempCompDeck.shift();
-      tempPlayerDeck.push(card);
-      tempPlayerDeck.push(tempPlayerDeck.shift());
+    if(player > computer){ // If player has a higher value.
+      const card = tempCompDeck.shift(); // Take the card from the computer
+      tempPlayerDeck.push(card); // Put it into the player deck
+      tempPlayerDeck.push(tempPlayerDeck.shift()); // Put your own card back into deck.
+      if(this.state.game.tempDeck.length > 0 ){ // If there were the same values drawn.
+        const tempDeck = [...this.state.game.tempDeck];
+        // This portion is not altogether working correctly.  Current Issue: Even though the length might be 6, only half the cards are pushed to the player or computer.
+        for(let i = 0; i < tempDeck.length; i++){ 
+          let card = tempDeck.shift();
+          tempPlayerDeck.push(card);
+        }
+        this.setState((prevState) => ({
+          prevState,
+          game: {...prevState.game, tempDeck: [...tempDeck]},
+        }));
+      }
     } else if(computer > player){
       const card = tempPlayerDeck.shift();
       tempCompDeck.push(card);
       tempCompDeck.push(tempCompDeck.shift());
-    } else if(player === computer){
-      console.log('EQUALS');
-
+      if(this.state.game.tempDeck.length > 0 ){
+        const tempDeck = [...this.state.game.tempDeck];
+        for(let i = 0; i < tempDeck.length * 2 ; i++){
+          let card = tempDeck.shift();
+          tempCompDeck.push(card);
+        }
+        console.log('LENGTH', tempDeck.length);
+        this.setState((prevState) => ({
+          prevState,
+          game: {...prevState.game, tempDeck: [...tempDeck]},
+        }));
+      }
+    } else if(player === computer){ // If values are the same.
+      const tempDeck = [];
+      const dealCards = (num) => {
+        for(let i = 0; i < num; i++){
+          tempDeck.push(tempPlayerDeck.shift());
+          tempDeck.push(tempCompDeck.shift());
+        }
+        this.setState((prevState) => ({
+          prevState,
+          game: {...prevState.game, tempDeck: [...prevState.game.tempDeck, ...tempDeck]},
+        }));
+      }
+      dealCards(3);
     }
     this.setState((prevState)=> ({
       prevState,
@@ -161,6 +196,7 @@ class GameBoard extends Component {
     console.log('GAME DECK: ', this.state.game.deck);
     console.log('PLAYER DECK: ',this.state.game.playerDeck);
     console.log('COMPUTER DECK: ',this.state.game.computerDeck);
+    console.log('TEMP DECK: ',this.state.game.tempDeck);
 
     const compData = this.state.game.computerDeck;
     const playerData = this.state.game.playerDeck;
