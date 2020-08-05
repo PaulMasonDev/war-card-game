@@ -166,8 +166,7 @@ class GameBoard extends Component {
     console.log("COMPUTER DECK: ", this.state.computerDeck);
     console.log("TEMP DECK: ", this.state.tempDeck);
     console.log(this.state.winner);
-    const heading = '';
-
+  
     return (
       <div className="GameBoard">
         <h1>{this.state.message}</h1>
