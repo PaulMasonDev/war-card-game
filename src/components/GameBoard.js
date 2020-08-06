@@ -143,6 +143,12 @@ class GameBoard extends Component {
       ? this.setState({winner: 'player'})
       : this.setState({winner: 'computer'});
     console.log("Player: ", player, "Computer: ", computer);
+
+    if(this.state.playerDeck.length === 0){
+      this.setState({message: 'COMPUTER WINS!'});
+    } else if(this.state.computerDeck.length === 0){
+      this.setState({message: 'PLAYER WINS!'});
+    }
   };
 
   handleClick = () => {
@@ -171,8 +177,10 @@ class GameBoard extends Component {
       <div className="GameBoard">
         <h1>{this.state.message}</h1>
         <h3 className="GameBoard-header">{this.state.cardMessage}</h3>
-        <ComputerHand data={this.state.computerDeck} />
-        <PlayerHand data={this.state.playerDeck} />
+        <div className="GameBoard-play">
+          <ComputerHand data={this.state.computerDeck} />
+          <PlayerHand data={this.state.playerDeck} />
+        </div>
         <button onClick={this.handleClick}>Next Round</button>
       </div>
     );
