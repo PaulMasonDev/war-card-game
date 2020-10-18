@@ -181,7 +181,7 @@ class GameBoard extends Component {
           <ComputerHand data={this.state.computerDeck} />
           <PlayerHand data={this.state.playerDeck} />
         </div>
-        <button onClick={this.handleClick}>Next Round</button>
+        <button className="btn" onClick={this.handleClick}>Next Round</button>
       </div>
     );
   }
